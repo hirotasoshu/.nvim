@@ -4,7 +4,7 @@ if not status_ok then
 end
 
 catppuccin.setup({
-  flavour = "macchiato", -- latte, frappe, macchiato, mocha
+	flavour = "macchiato", -- latte, frappe, macchiato, mocha
 	compile = {
 		enabled = true,
 		path = vim.fn.stdpath("cache") .. "/catppuccin",
@@ -19,4 +19,3 @@ catch /^Vim\%((\a\+)\)\=:E185/
   set background=dark
 endtry
 ]])
-

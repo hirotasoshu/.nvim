@@ -51,7 +51,7 @@ vim.api.nvim_create_autocmd({ "VimEnter" }, {
 
 vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
 	callback = function()
-	local line_count = vim.api.nvim_buf_line_count(0)
+		local line_count = vim.api.nvim_buf_line_count(0)
 		if line_count >= 5000 then
 			vim.cmd("IlluminatePauseBuf")
 		end
@@ -62,9 +62,9 @@ vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
 vim.api.nvim_create_autocmd("User", {
 	pattern = "PackerCompileDone",
 	callback = function()
-		vim.cmd "CatppuccinCompile"
+		vim.cmd("CatppuccinCompile")
 		vim.defer_fn(function()
-			vim.cmd "colorscheme catppuccin"
+			vim.cmd("colorscheme catppuccin")
 		end, 0) -- Defered for live reloading
-	end
+	end,
 })
