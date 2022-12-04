@@ -175,6 +175,15 @@ return packer.startup(function(use)
 		end,
 	})
 
+	-- python venvs
+	-- use venom fork because veom maintainer doesn't merge lua support
+
+	vim.g.venom_loaded = 1
+	use({
+		"hirotasoshu/vim-venom",
+		ft = { "python" },
+		config = 'require("venom").setup()',
+	})
 	-- Telescope
 	use({
 		"nvim-telescope/telescope.nvim",
