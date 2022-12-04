@@ -36,7 +36,7 @@ git clone https://github.com/LunarVim/nvim-basic-ide.git ~/.config/nvim
 
 Run `nvim` and wait for the plugins to be installed
 
-**NOTE** First time you will get an error just ignore them and press enter, it will say nvim-ts-context-commentstring is not installed but that is fine just close and reopen nvim and everything should be fine  
+**NOTE** First time you will get an error just ignore them and press enter, it will say nvim-ts-context-commentstring is not installed but that is fine just close and reopen nvim and everything should be fine
 
 **NOTE** (You will notice treesitter pulling in a bunch of parsers the next time you open Neovim)
 
@@ -122,14 +122,14 @@ If you want to install any from there, for example terraform_lsp(which adds more
 ```lua
 -- lua/usr/lsp/mason.lua
 local servers = {
-	"sumneko_lua",
-	"cssls",
-	"html",
-	"tsserver",
-	"pyright",
-	"bashls",
-	"jsonls",
-	"yamlls",
+ "sumneko_lua",
+ "cssls",
+ "html",
+ "tsserver",
+ "pyright",
+ "bashls",
+ "jsonls",
+ "yamlls",
   "terraform_lsp" -- New LSP
 }
 ```
