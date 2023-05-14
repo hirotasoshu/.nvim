@@ -23,3 +23,7 @@ telescope.setup({
 		},
 	},
 })
+
+require("user.project")
+telescope.load_extension("projects")
+telescope.load_extension("fzf")

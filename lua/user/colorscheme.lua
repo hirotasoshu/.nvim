@@ -36,7 +36,7 @@ catppuccin.setup({
 		pounce = false,
 		semantic_tokens = false,
 		symbols_outline = false,
-		telekasten = false,
+		telekasten = true,
 		telescope = true,
 		treesitter = true,
 		treesitter_context = true,

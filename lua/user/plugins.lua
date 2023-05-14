@@ -45,7 +45,7 @@ packer.init({
 return packer.startup(function(use)
 	-- My plugins here
 	use({ "wbthomason/packer.nvim" }) -- Have packer manage itself
-	use({ "nvim-lua/plenary.nvim" }) -- Useful lua functions used by lots of plugins
+	use({ "nvim-lua/plenary.nvim", opt = true, module = "plenary" }) -- Useful lua functions used by lots of plugins
 	use({
 		"windwp/nvim-autopairs",
 		opt = true,
@@ -57,13 +57,13 @@ return packer.startup(function(use)
 	use({
 		"numToStr/Comment.nvim",
 		opt = true,
-		event = "BufReadPost",
+		module = "Comment",
+		keys = { "gc", "gb" },
 		config = function()
 			require("user.comment")
 		end,
 	})
-	use({ "JoosepAlviste/nvim-ts-context-commentstring", opt = true, after = "nvim-treesitter" })
-	use({ "kyazdani42/nvim-web-devicons" })
+	use({ "kyazdani42/nvim-web-devicons", opt = true, module = "nvim-web-devicons" })
 	use({
 		"kyazdani42/nvim-tree.lua",
 		cmd = {
@@ -81,20 +81,19 @@ return packer.startup(function(use)
 	use({
 		"akinsho/bufferline.nvim",
 		opt = true,
-		event = "BufReadPost",
-		after = "catppuccin",
 		config = function()
 			require("user.bufferline")
 		end,
 	})
-	use({ "moll/vim-bbye" })
+	use({ "moll/vim-bbye", opt = true, cmd = { "Bdelete", "Bwipeout" } })
+
 	use({
 		"nvim-lualine/lualine.nvim",
-		opt = true,
-		event = "BufReadPost",
 		config = function()
 			require("user.lualine")
 		end,
+		opt = true,
+		event = "BufRead",
 	})
 	use({
 		"akinsho/toggleterm.nvim",
@@ -102,15 +101,6 @@ return packer.startup(function(use)
 		config = function()
 			require("user.toggleterm")
 		end,
-	})
-	use({
-		"ahmedkhalf/project.nvim",
-		config = function()
-			require("user.project")
-		end,
-		opt = true,
-		event = "BufWinEnter",
-		after = "telescope.nvim",
 	})
 	use({ "lewis6991/impatient.nvim" })
 	use({
@@ -121,8 +111,26 @@ return packer.startup(function(use)
 			require("user.indentline")
 		end,
 	})
-	use({ "goolord/alpha-nvim" })
+	use({
+		"goolord/alpha-nvim",
+		config = function()
+			require("user.alpha")
+		end,
+		opt = true,
+		cmd = "Alpha",
+		module = "alpha",
+	})
 
+	use({
+		"echasnovski/mini.surround",
+		config = function()
+			require("mini.surround").setup({
+				-- Configuration here, or leave empty to use defaults
+			})
+		end,
+		module = "mini.surround",
+		keys = { "sa", "sd", "sf", "sF", "sh", "sr", "sn" },
+	})
 	-- Colorschemes
 	use({
 		"catppuccin/nvim",
@@ -136,21 +144,20 @@ return packer.startup(function(use)
 	-- cmp plugins
 	use({
 		"hrsh7th/nvim-cmp",
-		event = "BufReadPost",
-		after = { "LuaSnip" },
+		after = { "friendly-snippets" },
 		config = function()
 			require("user.cmp")
 		end,
 	}) -- The completion plugin
-	use({ "hrsh7th/cmp-buffer", after = "nvim-cmp", opt = true }) -- buffer completions
-	use({ "hrsh7th/cmp-path", after = "nvim-cmp", opt = true }) -- path completions
-	use({ "saadparwaiz1/cmp_luasnip", after = { "nvim-cmp", "LuaSnip" } }) -- snippet completions
-	use({ "hrsh7th/cmp-nvim-lsp", after = "nvim-cmp", opt = true })
-	use({ "hrsh7th/cmp-nvim-lua", after = "nvim-cmp", opt = true })
+	use({ "hrsh7th/cmp-buffer", after = "cmp-nvim-lsp", opt = true }) -- buffer completions
+	use({ "hrsh7th/cmp-path", after = "cmp-buffer", opt = true }) -- path completions
+	use({ "saadparwaiz1/cmp_luasnip", after = { "LuaSnip" } }) -- snippet completions
+	use({ "hrsh7th/cmp-nvim-lsp", after = "cmp-nvim-lua", opt = true })
+	use({ "hrsh7th/cmp-nvim-lua", after = "cmp_luasnip", opt = true })
 
 	-- snippets
-	use({ "L3MON4D3/LuaSnip", opt = true, event = "BufReadPost" }) --snippet engine
-	use({ "rafamadriz/friendly-snippets", event = "InsertEnter" }) -- a bunch of snippets to use
+	use({ "L3MON4D3/LuaSnip", opt = true, after = "nvim-cmp", wants = "friendly-snippets" }) --snippet engine
+	use({ "rafamadriz/friendly-snippets", event = "InsertEnter" }) -- a bunch of snippets to useplugins
 
 	-- LSP
 	-- use { "williamboman/nvim-lsp-installer", commit = "e9f13d7acaa60aff91c58b923002228668c8c9e6" } -- simple to use language server installer
@@ -158,13 +165,17 @@ return packer.startup(function(use)
 		"neovim/nvim-lspconfig",
 		opt = true,
 		event = "BufReadPre",
-		after = "mason.nvim",
 		config = function()
 			require("user.lsp")
 		end,
 	})
-	use({ "williamboman/mason.nvim" })
-	use({ "williamboman/mason-lspconfig.nvim" })
+	use({
+		"williamboman/mason.nvim",
+		opt = true,
+		module = "mason",
+		cmd = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUninstall", "MasonUninstallAll", "MasonLog" },
+	})
+	use({ "williamboman/mason-lspconfig.nvim", opt = true, module = "mason-lspconfig" })
 	use({ "jose-elias-alvarez/null-ls.nvim", opt = true, event = "BufReadPre" }) -- for formatters and linters
 	use({
 		"RRethy/vim-illuminate",
@@ -174,22 +185,45 @@ return packer.startup(function(use)
 			require("user.illuminate")
 		end,
 	})
-
+	use({
+		"dnlhc/glance.nvim",
+		opt = true,
+		cmd = "Glance",
+		config = function()
+			require("user.glance")
+		end,
+	})
 	-- python venvs
 	-- use venom fork because veom maintainer doesn't merge lua support
 
-	vim.g.venom_loaded = 1
-	use({
-		"hirotasoshu/vim-venom",
-		ft = { "python" },
-		config = 'require("venom").setup()',
-	})
+	-- vim.g.venom_loaded = 1
+	-- use({
+	-- 	"/home/hirotasoshu/code/vim-venom",
+	-- 	ft = { "python" },
+	-- 	config = 'require("venom").setup({})',
+	-- })
 	-- Telescope
 	use({
 		"nvim-telescope/telescope.nvim",
 		config = function()
 			require("user.telescope")
 		end,
+		requires = {
+			{
+				"ahmedkhalf/project.nvim",
+				opt = true,
+				module = "project_nvim",
+			},
+			{
+				"nvim-telescope/telescope-fzf-native.nvim",
+				run = "make",
+				opt = true,
+				module = "telescope._extensions.fzf",
+			},
+		},
+		opt = true,
+		cmd = "Telescope",
+		module = "telescope",
 	})
 
 	-- Treesitter
@@ -198,12 +232,15 @@ return packer.startup(function(use)
 		config = function()
 			require("user.treesitter")
 		end,
+		opt = true,
+		event = "BufRead",
 	})
+	use({ "JoosepAlviste/nvim-ts-context-commentstring", opt = true, after = "nvim-treesitter" })
 	-- Git
 	use({
 		"lewis6991/gitsigns.nvim",
 		opt = true,
-		event = "BufWinEnter",
+		ft = "gitcommit",
 		config = function()
 			require("user.gitsigns")
 		end,
@@ -238,7 +275,44 @@ return packer.startup(function(use)
 			"DIList",
 		},
 	})
+	-- telekasten
+	use({
+		"iamcco/markdown-preview.nvim",
+		run = "cd app && npm install",
+		setup = function()
+			vim.g.mkdp_filetypes = { "markdown" }
+		end,
+		ft = { "markdown" },
+		opt = true,
+		cmd = {
+			"MarkdownPreview",
+			"MarkdownPreviewStop",
+			"MarkdownPreviewToggle",
+		},
+	})
 
+	use({
+		"renerocksai/telekasten.nvim",
+		opt = true,
+		cmd = {
+			"Telekasten",
+		},
+		module = "telekasten",
+		config = function()
+			require("user.telekasten")
+		end,
+		requires = {
+			{
+				"renerocksai/calendar-vim",
+				opt = true,
+				cmd = {
+					"Calendar",
+					"CalendarT",
+					"CalendarH",
+				},
+			},
+		},
+	})
 	-- Automatically set up your configuration after cloning packer.nvim
 	-- Put this at the end after all plugins
 	if PACKER_BOOTSTRAP then
